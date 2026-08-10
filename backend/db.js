@@ -8,12 +8,9 @@ const sequelize = new Sequelize(
   {
     host: process.env.DB_HOST,
     port: process.env.DB_PORT,
-    dialect: 'mysql'
+    dialect: 'mysql',
+    logging: false // désactive les logs SQL verbeux (optionnel)
   }
 );
-
-sequelize.authenticate()
-  .then(() => console.log('✅ Connexion MySQL réussie via Sequelize'))
-  .catch(err => console.error('❌ Erreur de connexion :', err));
 
 module.exports = sequelize;
