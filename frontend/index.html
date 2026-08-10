@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Codveda — Registre de Produits</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <main class="sheet">
+    <header class="sheet-head">
+      <span class="eyebrow">Codveda · Full-Stack Internship</span>
+      <h1>Registre de Produits</h1>
+      <p class="subtitle">Ajoutez, consultez et retirez des articles de l'inventaire.</p>
+    </header>
+
+    <form id="add-form" class="entry-form">
+      <div class="field">
+        <label for="name">Article</label>
+        <input type="text" id="name" placeholder="ex. Clavier mécanique" required>
+      </div>
+      <div class="field field-price">
+        <label for="price">Prix (€)</label>
+        <input type="number" id="price" step="0.01" min="0" placeholder="0.00" required>
+      </div>
+      <button type="submit">Enregistrer</button>
+    </form>
+
+    <section class="ledger">
+      <div class="ledger-head">
+        <span>Articles enregistrés</span>
+        <span id="count-badge">0</span>
+      </div>
+      <ul id="product-list"></ul>
+    </section>
+  </main>
+
+  <script src="script.js"></script>
+</body>
+</html>
