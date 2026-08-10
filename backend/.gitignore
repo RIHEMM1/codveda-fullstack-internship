@@ -1,1 +1,24 @@
+# Dépendances
+node_modules/
+
+# Variables d'environnement (contient mots de passe/secrets)
 .env
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+logs/
+*.log
+
+# Fichiers système
+.DS_Store
+Thumbs.db
+
+# Éditeurs
+.vscode/
+.idea/
+
+# Build (si vous en avez plus tard, ex. frontend React)
+dist/
+build/
