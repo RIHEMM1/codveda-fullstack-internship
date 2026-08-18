@@ -1,9 +1,11 @@
 import { useState, useEffect } from 'react';
 import api from './api';
+import socket from './socket';
 import Login from './components/Login';
 import Signup from './components/Signup';
 import ProductForm from './components/ProductForm';
 import ProductList from './components/ProductList';
+import ToastContainer from './components/Toast';
 import './App.css';
 
 function App() {
@@ -11,9 +13,10 @@ function App() {
     const saved = localStorage.getItem('user');
     return saved ? JSON.parse(saved) : null;
   });
-  const [authView, setAuthView] = useState('login'); // 'login' | 'signup'
+  const [authView, setAuthView] = useState('login');
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [toasts, setToasts] = useState([]);
 
   const loadProducts = async () => {
     setLoading(true);
@@ -31,15 +34,54 @@ function App() {
     if (user) loadProducts();
   }, [user]);
 
+  const pushToast = (type, message) => {
+    const id = Date.now() + Math.random();
+    setToasts((prev) => [...prev, { id, type, message }]);
+  };
+
+  const dismissToast = (id) => {
+    setToasts((prev) => prev.filter((t) => t.id !== id));
+  };
+
+  useEffect(() => {
+    if (!user) return;
+
+    function onCreated(product) {
+      setProducts((prev) => {
+        if (prev.some(p => p.id === product.id)) return prev;
+        return [...prev, product];
+      });
+      pushToast('created', `"${product.name}" ajouté en direct`);
+    }
+
+    function onUpdated(product) {
+      setProducts((prev) => prev.map(p => p.id === product.id ? product : p));
+      pushToast('updated', `"${product.name}" mis à jour en direct`);
+    }
+
+    function onDeleted({ id }) {
+      setProducts((prev) => prev.filter(p => p.id !== id));
+      pushToast('deleted', `Un article a été supprimé en direct`);
+    }
+
+    socket.on('product:created', onCreated);
+    socket.on('product:updated', onUpdated);
+    socket.on('product:deleted', onDeleted);
+
+    return () => {
+      socket.off('product:created', onCreated);
+      socket.off('product:updated', onUpdated);
+      socket.off('product:deleted', onDeleted);
+    };
+  }, [user]);
+
   const handleAdd = async (product) => {
     await api.post('/products', product);
-    loadProducts();
   };
 
   const handleDelete = async (id) => {
     try {
       await api.delete(`/products/${id}`);
-      loadProducts();
     } catch (err) {
       alert(err.response?.data?.error || 'Erreur lors de la suppression');
     }
@@ -51,7 +93,6 @@ function App() {
     setUser(null);
   };
 
-  // --- Non connecté : afficher login/signup ---
   if (!user) {
     return (
       <main className="sheet auth-wrapper">
@@ -64,18 +105,19 @@ function App() {
     );
   }
 
-  // --- Connecté : afficher l'application ---
   return (
     <main className="sheet">
+      <ToastContainer toasts={toasts} onDismiss={dismissToast} />
+
       <header className="sheet-head">
         <div className="head-row">
           <div>
             <span className="eyebrow">Codveda · Full-Stack Internship</span>
             <h1>Registre de Produits</h1>
-           <p className="subtitle">
-  Connecté en tant que <strong>{user.email}</strong>{' '}
-  <span className="role-badge">{user.role}</span>
-</p>
+            <p className="subtitle">
+              Connecté en tant que <strong>{user.email}</strong>{' '}
+              <span className="role-badge">{user.role}</span>
+            </p>
           </div>
           <button className="logout-btn" onClick={handleLogout}>Déconnexion</button>
         </div>
