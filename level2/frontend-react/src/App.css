@@ -1,0 +1,330 @@
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@500;700&display=swap');
+
+:root {
+  --bg: #E7E9E4;
+  --surface: #FFFFFF;
+  --ink: #1F2421;
+  --ink-soft: #5B655F;
+  --accent: #375A55;
+  --accent-soft: #A9C5BE;
+  --line: #D8DAD1;
+  --danger: #B0413E;
+  --danger-soft: #F3DEDD;
+  --radius: 4px;
+  --shadow: 0 1px 2px rgba(31,36,33,0.04), 0 8px 24px rgba(31,36,33,0.06);
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  background: var(--bg);
+  background-image:
+    radial-gradient(circle at 1px 1px, rgba(31,36,33,0.05) 1px, transparent 0);
+  background-size: 22px 22px;
+  color: var(--ink);
+  font-family: 'Inter', sans-serif;
+}
+
+#root { min-height: 100vh; }
+
+.sheet {
+  width: 100%;
+  max-width: 880px;
+  margin: 0 auto;
+  padding: 48px 20px 80px;
+}
+
+/* --- En-tête --- */
+.sheet-head {
+  margin-bottom: 32px;
+  animation: fadeInDown 0.5s ease;
+}
+
+.eyebrow {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.72rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--accent);
+  font-weight: 700;
+}
+
+h1 {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 2.3rem;
+  font-weight: 700;
+  margin: 6px 0 4px;
+  letter-spacing: -0.01em;
+}
+
+.subtitle {
+  color: var(--ink-soft);
+  font-size: 0.95rem;
+}
+
+/* --- Layout principal : 2 colonnes sur desktop --- */
+.workspace {
+  display: grid;
+  grid-template-columns: 320px 1fr;
+  gap: 24px;
+  align-items: start;
+}
+
+/* --- Formulaire d'entrée (colonne fixe / sticky sur desktop) --- */
+.entry-form {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  padding: 22px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  box-shadow: var(--shadow);
+  position: sticky;
+  top: 24px;
+}
+
+.entry-form h2 {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 1rem;
+  font-weight: 700;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.field label {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--ink-soft);
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+
+.field input {
+  padding: 10px 12px;
+  border: 1.5px solid var(--line);
+  border-radius: var(--radius);
+  font-family: 'Inter', sans-serif;
+  font-size: 0.95rem;
+  color: var(--ink);
+  background: var(--bg);
+  transition: border-color 0.15s, background 0.15s;
+}
+
+.field-price input { font-family: 'JetBrains Mono', monospace; }
+
+.field input:focus {
+  outline: none;
+  border-color: var(--accent);
+  background: var(--surface);
+}
+
+.entry-form button {
+  height: 42px;
+  background: var(--accent);
+  color: white;
+  border: none;
+  border-radius: var(--radius);
+  font-family: 'Inter', sans-serif;
+  font-weight: 600;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: background 0.15s, transform 0.1s;
+}
+
+.entry-form button:hover { background: #2A443F; }
+.entry-form button:active { transform: scale(0.97); }
+
+/* --- Registre / liste --- */
+.ledger-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 4px 12px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--ink-soft);
+}
+
+#count-badge {
+  background: var(--accent-soft);
+  color: var(--accent);
+  padding: 2px 9px;
+  border-radius: 20px;
+  font-weight: 700;
+}
+
+#product-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+/* Ticket produit avec bord perforé + apparition animée */
+.ticket {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 18px;
+  box-shadow: var(--shadow);
+  animation: slideIn 0.35s ease;
+  transition: transform 0.15s, box-shadow 0.15s;
+}
+
+.ticket:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 2px 4px rgba(31,36,33,0.06), 0 12px 28px rgba(31,36,33,0.09);
+}
+
+.ticket::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 6px;
+  background-image: radial-gradient(circle at 6px 0, transparent 4px, var(--bg) 4.5px);
+  background-size: 12px 6px;
+  background-repeat: repeat-x;
+}
+
+.ticket-left {
+  display: flex;
+  gap: 12px;
+  align-items: baseline;
+  min-width: 0;
+}
+
+.ticket-no {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.75rem;
+  color: var(--ink-soft);
+  min-width: 44px;
+  flex-shrink: 0;
+}
+
+.ticket-name {
+  font-weight: 600;
+  font-size: 1rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.ticket-right {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  flex-shrink: 0;
+}
+
+.ticket-price {
+  font-family: 'JetBrains Mono', monospace;
+  font-weight: 700;
+  font-size: 1rem;
+  color: var(--accent);
+}
+
+.ticket-delete {
+  background: var(--danger-soft);
+  color: var(--danger);
+  border: none;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  cursor: pointer;
+  font-size: 1rem;
+  line-height: 1;
+  transition: background 0.15s, color 0.15s, transform 0.1s;
+}
+
+.ticket-delete:hover {
+  background: var(--danger);
+  color: white;
+  transform: scale(1.08);
+}
+
+.empty-state {
+  text-align: center;
+  padding: 48px 20px;
+  color: var(--ink-soft);
+  font-size: 0.9rem;
+  border: 1.5px dashed var(--line);
+  border-radius: 12px;
+  list-style: none;
+}
+
+/* --- Animations --- */
+@keyframes fadeInDown {
+  from { opacity: 0; transform: translateY(-8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes slideIn {
+  from { opacity: 0; transform: translateY(6px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* --- Responsive --- */
+
+/* Tablette : formulaire repasse en pleine largeur au-dessus de la liste */
+@media (max-width: 780px) {
+  .workspace {
+    grid-template-columns: 1fr;
+  }
+
+  .entry-form {
+    position: static;
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: end;
+  }
+
+  .entry-form h2 { flex-basis: 100%; }
+  .field { flex: 1; min-width: 140px; }
+  .entry-form button { flex-shrink: 0; }
+}
+
+/* Mobile */
+@media (max-width: 560px) {
+  .sheet { padding: 32px 14px 60px; }
+  h1 { font-size: 1.7rem; }
+
+  .entry-form {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .ticket {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 10px;
+  }
+
+  .ticket-right { justify-content: space-between; }
+  .ticket-name { white-space: normal; }
+}
+
+/* Accessibilité clavier */
+button:focus-visible,
+input:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+/* Respect des préférences de mouvement réduit */
+@media (prefers-reduced-motion: reduce) {
+  * { animation: none !important; transition: none !important; }
+}
